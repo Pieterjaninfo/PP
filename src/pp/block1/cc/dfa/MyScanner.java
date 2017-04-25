@@ -2,20 +2,11 @@ package pp.block1.cc.dfa;
 
 import java.util.ArrayList;
 import java.util.List;
-import static pp.block1.cc.dfa.State.ID6_DFA;
 
 /**
- * Created by pieterjan on 25-4-17.
+ * Greedy scanner that scans the given string and returns all tokens
  */
 public class MyScanner implements Scanner {
-
-    public static void main(String[] args) {
-        MyScanner scanner = new MyScanner();
-        State dfa;
-        dfa = ID6_DFA;
-        String text = "i1234#A12345";
-        scanner.scan(dfa, text);
-    }
 
     @Override
     public List<String> scan(State start, String text) {
@@ -26,6 +17,7 @@ public class MyScanner implements Scanner {
         String current_token = "";
         for (Character character : characters) {
             if (!state.hasNext(character)) {
+                System.out.println("Text: " + text + " has no tokens");
                 return null;
             }
             state = state.getNext(character);
