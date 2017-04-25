@@ -7,26 +7,30 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import pp.block1.cc.dfa.MyScanner;
 import pp.block1.cc.dfa.Scanner;
 import pp.block1.cc.dfa.State;
 
 /** Test class for Scanner implementation. */
 public class ScannerTest {
-	private Scanner myGen = null; // TODO instantiate your Scanner implementation
+	private Scanner myGen = new MyScanner();
 
 	@Test
 	public void testID6() {
 		this.dfa = ID6_DFA;
-		yields("");
-		yields("a12345", "a12345");
-		yields("a12345AaBbCc", "a12345", "AaBbCc");
+		yields("", true);
+//		yields("a1234$AaBbCc");
+//		yields("a12345AaBbC%");
+		yields("a12345", true, "a12345");
+		yields("a12345AaBbCc", true,"a12345", "AaBbCc");
+		yields("a12345b12345c12345", true,"a12345", "b12345", "c12345");
 	}
 
-	private void yields(String word, String... tokens) {
+	private void yields(String word, boolean correct, String... tokens) {
 		List<String> result = this.myGen.scan(this.dfa, word);
+
 		if (result == null) {
-			Assert.fail(String.format(
-					"Word '%s' is erroneously rejected by %s", word, this.dfa));
+			Assert.fail(String.format("Word '%s' is erroneously rejected by %s", word, this.dfa));
 		}
 		Assert.assertEquals(tokens.length, result.size());
 		for (int i = 0; i < tokens.length; i++) {

@@ -2,9 +2,6 @@ package pp.block1.cc.dfa;
 
 import static pp.block1.cc.dfa.State.ID6_DFA;
 
-import pp.block1.cc.dfa.Checker;
-import pp.block1.cc.dfa.State;
-
 /**
  * Checks whether the string fits the DFA: [a-zA-Z][0-9a-zA-Z]{5}
  */
@@ -29,7 +26,5 @@ public class MyChecker implements Checker {
             state = state.getNext(character);
         }
         return state.isAccepting();
-
-
     }
 }
