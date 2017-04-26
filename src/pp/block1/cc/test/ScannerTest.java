@@ -8,13 +8,15 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import pp.block1.cc.dfa.GreedyScanner;
 import pp.block1.cc.dfa.MyScanner;
 import pp.block1.cc.dfa.Scanner;
 import pp.block1.cc.dfa.State;
 
 /** Test class for Scanner implementation. */
 public class ScannerTest {
-	private Scanner myGen = new MyScanner();
+	private Scanner myGen = new GreedyScanner();
+//	private Scanner myGen = new MyScanner();
 
 	@Test
 	public void testID6() {
@@ -26,9 +28,8 @@ public class ScannerTest {
 		yields("a12345b12345c12345", true,"a12345", "b12345", "c12345");
 		yields("a1234$AaBbCc", false);
 		yields("a12345AaBbC%", false);
-		yields("a12345AaBbCc%", false);
 		yields("%a12345AaBbCc", false);
-		yields("a12345%AaBbCc", false);
+
 	}
 
 	@Test
@@ -37,6 +38,8 @@ public class ScannerTest {
 	    yields("La", true, "La");
 	    yields("LaLa", true, "LaLa");
 	    yields("LaLaLa", true, "LaLa", "La");
+	    yields("LaLaLaLi", true, "LaLaLaLi");
+	    yields("Laaaa LaLaa", true, "Laaaa La", "Laa");
     }
 
 	private void yields(String word, boolean correct, String... tokens) {

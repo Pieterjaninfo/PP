@@ -114,8 +114,6 @@ public class State {
 		State lala10 = new State(10, false);
 		State lala11 = new State(11, true);
 		State lala12 = new State(12, true);
-//		State[] states = { LALA_DFA, lala1, lala2, lala3, lala4, lala5, lala6,
-//							lala7, lala8, lala9, lala10, lala11, lala12 };
 
 		// Add transitions
 		LALA_DFA.addNext('L', lala1);
@@ -140,6 +138,5 @@ public class State {
 		lala10.addNext('i', lala11);
 		lala11.addNext(' ', lala12);
 		lala12.addNext(' ', lala12);
-
 	}
 }

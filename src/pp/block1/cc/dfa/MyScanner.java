@@ -12,7 +12,7 @@ public class MyScanner implements Scanner {
     public List<String> scan(State start, String text) {
         State state = start;
         List<String> tokens = new ArrayList<>();
-        char characters[] = text.toCharArray();
+        char[] characters = text.toCharArray();
 
         String current_token = "";
         for (Character character : characters) {
