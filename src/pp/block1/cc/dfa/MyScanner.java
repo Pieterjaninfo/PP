@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Greedy scanner that scans the given string and returns all tokens
+ * Greedy BROKEN scanner that scans the given string and returns all tokens
  */
 public class MyScanner implements Scanner {
 
