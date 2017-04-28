@@ -11,7 +11,7 @@ public class MyChecker implements Checker {
     public boolean accepts(State state, String word) {
         char characters[] = word.toCharArray();
         for (Character character : characters) {
-            System.out.printf("char: %s current state: %d is_accepting: %s\n", character, state.getNumber(), state.isAccepting());
+            //System.out.printf("char: %s current state: %d is_accepting: %s\n", character, state.getNumber(), state.isAccepting());
             if (!state.hasNext(character)) {
                 return false;
             }

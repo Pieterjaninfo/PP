@@ -8,14 +8,13 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import pp.block1.cc.dfa.GreedyScanner;
-import pp.block1.cc.dfa.MyScanner;
+import pp.block1.cc.dfa.GreedyScanner2;
 import pp.block1.cc.dfa.Scanner;
 import pp.block1.cc.dfa.State;
 
 /** Test class for Scanner implementation. */
 public class ScannerTest {
-	private Scanner myGen = new GreedyScanner();
+	private Scanner myGen = new GreedyScanner2();
 //	private Scanner myGen = new MyScanner();
 
 	@Test

@@ -19,8 +19,11 @@ public class GreedyScanner implements Scanner {
 
         String current_token = "";
         String last_token = "";
+
         int last_i = 0;
         int i = 0;
+
+
         if (debug) System.out.println("Entered word: " + text);
         while (i < characters.length) {
             Character character = characters[i];
@@ -41,7 +44,6 @@ public class GreedyScanner implements Scanner {
             state = state.getNext(character);
             current_token += character;
 
-            // If accepting add token to current token
             if (state.isAccepting()) {
                 last_token = current_token;
                 last_i = i;
