@@ -12,10 +12,11 @@ public class id6Test {
 		tester.correct("z1b23d");
 		tester.correct("G420GG");
 		tester.wrong("123456");
+		tester.wrong("1");
 	}
 
 	@Test
-	public void noSpacesBetweenKeywordsTest() {
+	public void keywordsTest() {
 		// the following is perfectly fine, so claiming it's wrong will fail
 		tester.yields("a13245", id6.ID);
 		tester.yields("a13245G12AcB", id6.ID, id6.ID);

@@ -14,14 +14,16 @@ public class QuotationsTest {
 		tester.wrong("hello");
 		tester.wrong(("\"hello"));
 		tester.wrong(("hello\""));
+		tester.wrong("\"hello\" \"whatssup\"");
 		tester.wrong("\"hello\"\"wasup");
 		tester.wrong("\"hello\"wasup\"");
 		tester.wrong("\"Hello\"what");
 	}
 
 	@Test
-	public void noSpacesBetweenKeywordsTest() {
+	public void keywordsTest() {
 		// the following is perfectly fine, so claiming it's wrong will fail
 		tester.yields("\"teststring\"", Quotations.CITATION);
+//		tester.yields("\"teststring\" \"lol lol\"", Quotations.CITATION, Quotations.CITATION);
 	}
 }
