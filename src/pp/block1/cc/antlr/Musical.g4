@@ -1,6 +1,8 @@
 lexer grammar Musical;
 
-SONG: LA | LA LA | LA LA LA LI;
+LA: La;
+LALA: La La;
+LALALALI: La La La Li;
 
-fragment LA: 'L' 'a'+ ' '*;
-fragment LI: 'Li' ' '*;
+fragment La: 'L' 'a'+ ' '*;
+fragment Li: 'Li' ' '*;

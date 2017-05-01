@@ -11,8 +11,11 @@ public class id6Test {
 		tester.correct("a12345");
 		tester.correct("z1b23d");
 		tester.correct("G420GG");
+		tester.correct("");
 		tester.wrong("123456");
 		tester.wrong("1");
+		tester.wrong("abcde\"");
+		tester.wrong("abcde#");
 	}
 
 	@Test

@@ -29,11 +29,11 @@ public class MusicalTest {
 	@Test
 	public void keywordsTest() {
 		// the following is perfectly fine, so claiming it's wrong will fail
-		tester.yields("La", Musical.SONG);
-		tester.yields("LaLa", Musical.SONG);
-		tester.yields("LaLaLaLi", Musical.SONG);
-
-		tester.yields("LaLaLa", Musical.SONG, Musical.SONG);
-		tester.yields("LaLaLaLaLaLi", Musical.SONG, Musical.SONG);
+		tester.yields("La", Musical.LA);
+		tester.yields("LaLa", Musical.LALA);
+		tester.yields("LaLaLaLi", Musical.LALALALI);
+//
+		tester.yields("LaLaLa", Musical.LALA, Musical.LA);
+		tester.yields("LaLaLaLaLaLi", Musical.LALA, Musical.LALALALI);
 	}
 }

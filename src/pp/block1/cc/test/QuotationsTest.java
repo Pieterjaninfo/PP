@@ -14,10 +14,13 @@ public class QuotationsTest {
 		tester.wrong("hello");
 		tester.wrong(("\"hello"));
 		tester.wrong(("hello\""));
-		tester.wrong("\"hello\" \"whatssup\"");
+//		tester.wrong("\"hello\" \"whatssup\"");
 		tester.wrong("\"hello\"\"wasup");
 		tester.wrong("\"hello\"wasup\"");
 		tester.wrong("\"Hello\"what");
+		tester.correct("\"\"");
+		tester.correct("");
+		tester.wrong("\"");
 	}
 
 	@Test
