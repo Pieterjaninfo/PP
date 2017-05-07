@@ -14,6 +14,7 @@ public class RandomDrift extends Thread {
             p.moveX(n);
             int m = (int) (Math.random() * 10);
             p.moveY(m);
+            System.out.println("X:" + p.getX() + " Y:" +p.getY());
         }
     }
 }
