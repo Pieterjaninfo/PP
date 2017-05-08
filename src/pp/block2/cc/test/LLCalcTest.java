@@ -18,22 +18,120 @@ import pp.block2.cc.Term;
 import pp.block2.cc.ll.*;
 
 public class LLCalcTest {
-	Grammar sentenceG = Grammars.makeSentence();
+	private Grammar sentenceG = Grammars.makeSentence();
 	// Define the non-terminals
-	NonTerm subj = sentenceG.getNonterminal("Subject");
-	NonTerm obj = sentenceG.getNonterminal("Object");
-	NonTerm sent = sentenceG.getNonterminal("Sentence");
-	NonTerm mod = sentenceG.getNonterminal("Modifier");
+	private NonTerm subj = sentenceG.getNonterminal("Subject");
+	private NonTerm obj = sentenceG.getNonterminal("Object");
+	private NonTerm sent = sentenceG.getNonterminal("Sentence");
+	private NonTerm mod = sentenceG.getNonterminal("Modifier");
 	// Define the terminals
-	Term adj = sentenceG.getTerminal(Sentence.ADJECTIVE);
-	Term noun = sentenceG.getTerminal(Sentence.NOUN);
-	Term verb = sentenceG.getTerminal(Sentence.VERB);
-	Term end = sentenceG.getTerminal(Sentence.ENDMARK);
+	private Term adj = sentenceG.getTerminal(Sentence.ADJECTIVE);
+	private Term noun = sentenceG.getTerminal(Sentence.NOUN);
+	private Term verb = sentenceG.getTerminal(Sentence.VERB);
+	private Term end = sentenceG.getTerminal(Sentence.ENDMARK);
 	// Now add the last rule, causing the grammar to fail
-	Grammar sentenceXG = Grammars.makeSentence();
+	private Grammar sentenceXG = Grammars.makeSentence();
 	{    sentenceXG.addRule(mod, mod, mod);
 	}
-	LLCalc sentenceXLL = createCalc(sentenceXG);
+	private LLCalc sentenceXLL = createCalc(sentenceXG);
+
+	// If then else grammar
+	private Grammar ifG = Grammars.makeIf();
+	private NonTerm stat = ifG.getNonterminal("Stat");
+	private NonTerm elsePart = ifG.getNonterminal("ElsePart");
+	private Term assign = ifG.getTerminal(If.ASSIGN);
+	private Term iff = ifG.getTerminal(If.IF);
+	private Term expr = ifG.getTerminal(If.COND);
+	private Term then = ifG.getTerminal(If.THEN);
+	private Term elsee = ifG.getTerminal(If.ELSE);
+	private Term eof = Symbol.EOF;
+	private Term empty = Symbol.EMPTY;
+	private LLCalc ifLL = createCalc(ifG);
+
+	// L grammar
+	private Grammar LG = Grammars.makeL();
+	private NonTerm l = LG.getNonterminal("L");
+	private NonTerm r = LG.getNonterminal("R");
+	private NonTerm r2 = LG.getNonterminal("R'");
+	private NonTerm q = LG.getNonterminal("Q");
+	private NonTerm q2 = LG.getNonterminal("Q'");
+	private Term a = LG.getTerminal(L.A);
+	private Term b = LG.getTerminal(L.B);
+	private Term c = LG.getTerminal(L.C);
+	private LLCalc LLL = createCalc(LG);
+
+	/** Tests the LL-calculator for the If grammar. (2-CC.1) */
+	@Test
+	public void testIfLL1() {
+		assertFalse(ifLL.isLL1());
+	}
+	@Test
+	public void testIfFirst() {
+		Map<Symbol, Set<Term>> first = ifLL.getFirst();
+		assertEquals(set(assign, iff), first.get(stat));
+		assertEquals(set(elsee, empty), first.get(elsePart));
+	}
+	@Test
+	public void testIfFollow() {
+		Map<NonTerm, Set<Term>> follow = ifLL.getFollow();
+		assertEquals(set(eof, elsee), follow.get(stat));
+		assertEquals(set(eof, elsee), follow.get(elsePart));
+	}
+	@Test
+	public void testIfFirstp() {
+		Map<Rule, Set<Term>> firstp = ifLL.getFirstp();
+		assertEquals(set(assign), firstp.get(ifG.getRules(stat).get(0)));
+		assertEquals(set(iff), firstp.get(ifG.getRules(stat).get(1)));
+		assertEquals(set(elsee), firstp.get(ifG.getRules(elsePart).get(0)));
+		assertEquals(set(eof, empty, elsee), firstp.get(ifG.getRules(elsePart).get(1)));
+	}
+
+	/** Tests the LL-calculator for the L grammar. (2-CC.2) */
+	@Test
+	public void testLLL() {
+		assertTrue(LLL.isLL1());
+	}
+	@Test
+	public void testLFirst() {
+		Map<Symbol, Set<Term>> first = LLL.getFirst();
+		assertEquals(set(a,b,c), first.get(l));
+		assertEquals(set(a,c), first.get(r));
+		assertEquals(set(b,empty), first.get(r2));
+		assertEquals(set(b), first.get(q));
+		assertEquals(set(b,c), first.get(q2));
+	}
+	@Test
+	public void testLFollow() {
+		Map<NonTerm, Set<Term>> follow = LLL.getFollow();
+		assertEquals(set(eof), follow.get(l));
+		assertEquals(set(a), follow.get(r));
+		assertEquals(set(a), follow.get(r2));
+		assertEquals(set(b), follow.get(q));
+		assertEquals(set(b), follow.get(q2));
+	}
+	@Test
+	public void testLFirstp() {
+		Map<Rule, Set<Term>> firstp = LLL.getFirstp();
+		List<Rule> lRules = LG.getRules(l);
+		List<Rule> rRules = LG.getRules(r);
+		List<Rule> r2Rules = LG.getRules(r2);
+		List<Rule> qRules = LG.getRules(q);
+		List<Rule> q2Rules = LG.getRules(q2);
+		assertEquals(set(a,c), firstp.get(lRules.get(0)));
+		assertEquals(set(b), firstp.get(lRules.get(1)));
+
+		assertEquals(set(a), firstp.get(rRules.get(0)));
+		assertEquals(set(c), firstp.get(rRules.get(1)));
+
+		assertEquals(set(b), firstp.get(r2Rules.get(0)));
+		assertEquals(set(empty, a), firstp.get(r2Rules.get(1)));
+
+		assertEquals(set(b), firstp.get(qRules.get(0)));
+
+		assertEquals(set(b), firstp.get(q2Rules.get(0)));
+		assertEquals(set(c), firstp.get(q2Rules.get(1)));
+	}
+
 
 	/** Tests the LL-calculator for the Sentence grammar. */
 	@Test
