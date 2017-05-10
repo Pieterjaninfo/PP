@@ -70,7 +70,7 @@ public class GenericLLParser implements Parser {
 	}
 
 	/** Parses the start of the token stream according to a given
-	 * rule, recursively calling {@link #parse(Symbol)} to process
+	 * rule, recursively calling {@link #parse(Symbol)} to calculate
 	 * the RHS.
 	 * @return the sub-AST resulting from the parsing of the rule.
 	 * The top node is the node for the LHS of the rule, its direct
