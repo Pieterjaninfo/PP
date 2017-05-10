@@ -26,7 +26,7 @@ public class MyLLCalc implements LLCalc {
         for (Term T : grammar.getTerminals()) {
             HashSet<Term> set = new HashSet<>();
             set.add(T);
-            first.put((Symbol) T, set);
+            first.put(T, set);
         }
 
         for (Symbol NT : grammar.getNonterminals()) {

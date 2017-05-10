@@ -29,9 +29,6 @@ public class LParser implements Parser {
 	private AST parseL() throws ParseException {
 		AST result = new AST(L);
 		Token next = peek();
-		System.out.println("NEXT TOKEN:" + next.getType());
-		System.out.println("i:" + index);
-		System.out.println(tokens);
 		switch (next.getType()) {
 			case A:
 			case C:
@@ -50,7 +47,7 @@ public class LParser implements Parser {
 	}
 
 	private AST parseR() throws ParseException {
-		AST result = new AST(L);
+		AST result = new AST(R);
 		Token next = peek();
 
 		switch (next.getType()) {
@@ -60,7 +57,7 @@ public class LParser implements Parser {
 				result.addChild(parseToken(A));
 				result.addChild(parseR2());
 				break;
-			case B:
+			case C:
 				result.addChild(parseToken(C));
 				result.addChild(parseToken(A));
 				result.addChild(parseToken(B));
@@ -74,7 +71,7 @@ public class LParser implements Parser {
 	}
 
 	private AST parseR2() throws ParseException {
-		AST result = new AST(L);
+		AST result = new AST(R2);
 		Token next = peek();
 
 		switch (next.getType()) {
@@ -83,9 +80,8 @@ public class LParser implements Parser {
 				result.addChild(parseToken(C));
 				result.addChild(parseR2());
 				break;
-
-			// empty word?
-//			case Symbol.EMPTY:
+			case A:
+				return null;
 			default:
 				throw unparsable(R2);
 		}
@@ -93,7 +89,7 @@ public class LParser implements Parser {
 	}
 
 	private AST parseQ() throws ParseException {
-		AST result = new AST(L);
+		AST result = new AST(Q);
 		Token next = peek();
 
 		switch (next.getType()) {
@@ -108,7 +104,7 @@ public class LParser implements Parser {
 	}
 
 	private AST parseQ2() throws ParseException {
-		AST result = new AST(L);
+		AST result = new AST(Q2);
 		Token next = peek();
 
 		switch (next.getType()) {
@@ -179,7 +175,7 @@ public class LParser implements Parser {
 		} else {
 			for (String text : args) {
 				CharStream stream = CharStreams.fromString(text);
-				Lexer lexer = new Sentence(stream);
+				Lexer lexer = new L(stream);
 				try {
 					System.out.printf("Parse tree: %n%s%n",
 							new LParser().parse(lexer));

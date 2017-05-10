@@ -26,6 +26,7 @@ public class SentenceConverterTest {
 	@Test
 	public void testSentence() {
 		compare("students love students.");
+		compare("all students love all students.");
 		compare("all undergraduate students love all compilers.");
 		fails("students all undergraduate love all compilers");
 		fails("undergraduate students love love.");

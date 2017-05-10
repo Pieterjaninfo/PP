@@ -29,6 +29,7 @@ public class SentenceCounter extends SentenceBaseListener {
 		Lexer lexer = new SentenceLexer(CharStreams.fromString(text));
 		SentenceParser parser = new SentenceParser(new CommonTokenStream(lexer));
 		ParseTree tree = parser.sentence();
+		System.out.println("tree = " + tree);
 		new ParseTreeWalker().walk(this, tree);
 		System.out.printf("Results for '%s':%n", text);
 		System.out.printf("Parse tree: %s%n", tree.toStringTree(parser));

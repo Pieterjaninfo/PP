@@ -1,9 +1,6 @@
 package pp.block2.cc.ll;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Token;
@@ -31,7 +28,7 @@ public class GenericLLParser implements Parser {
 
 	public GenericLLParser(Grammar g) {
 		this.g = g;
-		this.calc = null; // TODO Instantiate your LLCalc-implementation
+		this.calc = new MyLLCalc(g); 	// Instantiate your LLCalc-implementation
 	}
 
 	@Override
@@ -54,7 +51,22 @@ public class GenericLLParser implements Parser {
 	 * because the token stream does not contain the expected symbols
 	 */
 	private AST parse(Symbol symb) throws ParseException {
-		return null; // TODO fill in
+		if (symb instanceof Term) {
+			//terminal
+			if (symb == Symbol.EMPTY) {
+				return null;
+			} else {
+				Token token = next();
+				if (token.getType() == ((Term) symb).getTokenType()) {
+					return new AST((Term) symb, token);
+				} else {
+					throw new ParseException("Invalid symbol token type.");
+				}
+			}
+		} else {
+			//non terminal
+			return parse(lookup((NonTerm) symb));
+		}
 	}
 
 	/** Parses the start of the token stream according to a given
@@ -67,7 +79,11 @@ public class GenericLLParser implements Parser {
 	 * because the token stream does not contain the expected symbols
 	 */
 	private AST parse(Rule rule) throws ParseException {
-		return null; // TODO fill in
+		AST ast = new AST(rule.getLHS());
+		for (Symbol symb : rule.getRHS()) {
+			ast.addChild(parse(symb));
+		}
+		return ast;
 	}
 
 	/** Uses the lookup table to look up the rule to which
@@ -130,6 +146,27 @@ public class GenericLLParser implements Parser {
 
 	/** Constructs the {@link #ll1Table}. */
 	private Map<NonTerm, Map<Term, Rule>> calcLL1Table() {
-		return null; // TODO fill in
+		Map<NonTerm, Map<Term, Rule>> result = new HashMap<>();
+		Map<Rule, Set<Term>> firstp = calc.getFirstp();
+
+		for (Map.Entry<Rule, Set<Term>> entry : firstp.entrySet()) {
+			NonTerm nt = entry.getKey().getLHS();
+			if (!result.containsKey(nt)) {
+				//nt does not exist
+				Map<Term, Rule> ntmap = new HashMap<>();
+				for (Term term : entry.getValue()) {
+					ntmap.put(term, entry.getKey());
+				}
+				result.put(nt, ntmap);
+			} else {
+				// nt exists
+				Map<Term, Rule> ntmap = result.get(nt);
+				for (Term term : entry.getValue()) {
+					ntmap.put(term, entry.getKey());
+				}
+				result.put(nt, ntmap);
+			}
+		}
+		return result;
 	}
 }
