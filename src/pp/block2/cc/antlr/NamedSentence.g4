@@ -13,10 +13,9 @@ object: modifier object //#modObject
       | NOUN            //#simpleObject
       ;
 /** Modifier in an object or subject. */
-//modifier: <assoc=right> modifier ',' modifier
-//        | ADJECTIVE
-//        ;
-modifier : ADJECTIVE;
+modifier: <assoc=right> modifier ',' modifier
+        | ADJECTIVE
+        ;
 
 
 NOUN : 'students' | 'compilers' ;
