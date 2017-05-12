@@ -6,15 +6,17 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.tree.*;
 import pp.block2.cc.ParseException;
 
+import java.math.BigInteger;
+
 public class ArithmeticCalculator extends ArithmeticBaseListener {
 
-	private ParseTreeProperty<Double> values;
+	private ParseTreeProperty<BigInteger> values;
 	private boolean foundError;
-	private double result;
+	private BigInteger result;
 
 	public void calculate(String text) {
 		this.values = new ParseTreeProperty<>();
-		this.result = 0;
+		this.result = new BigInteger("0");
 		this.foundError = false;
 		Lexer lexer = new ArithmeticLexer(CharStreams.fromString(text));
 		ArithmeticParser parser = new ArithmeticParser(new CommonTokenStream(lexer));
@@ -33,7 +35,7 @@ public class ArithmeticCalculator extends ArithmeticBaseListener {
 	@Override
 	public void exitAddExpr(ArithmeticParser.AddExprContext ctx) {
 		if (!foundError) {
-			double new_value = getValue(ctx.getChild(0)) + getValue(ctx.getChild(2));
+			BigInteger new_value = getValue(ctx.getChild(0)).add(getValue(ctx.getChild(2)));
 			setValue(ctx, new_value);
 		}
 	}
@@ -41,7 +43,7 @@ public class ArithmeticCalculator extends ArithmeticBaseListener {
 	@Override
 	public void exitMulExpr(ArithmeticParser.MulExprContext ctx) {
 		if (!foundError) {
-			double new_value = getValue(ctx.getChild(0)) * getValue(ctx.getChild(2));
+			BigInteger new_value = getValue(ctx.getChild(0)).multiply(getValue(ctx.getChild(2)));
 			setValue(ctx, new_value);
 		}
 	}
@@ -49,7 +51,7 @@ public class ArithmeticCalculator extends ArithmeticBaseListener {
 	@Override
 	public void exitPowExpr(ArithmeticParser.PowExprContext ctx) {
 		if (!foundError) {
-			double new_value = Math.pow(getValue(ctx.getChild(0)), getValue(ctx.getChild(2)));
+			BigInteger new_value = getValue(ctx.getChild(0)).pow(getValue(ctx.getChild(2)).intValue());
 			setValue(ctx, new_value);
 		}
 	}
@@ -57,7 +59,7 @@ public class ArithmeticCalculator extends ArithmeticBaseListener {
 	@Override
 	public void exitSubExpr(ArithmeticParser.SubExprContext ctx) {
 		if (!foundError) {
-			double new_value = getValue(ctx.getChild(0)) - getValue(ctx.getChild(2));
+			BigInteger new_value = getValue(ctx.getChild(0)).subtract(getValue(ctx.getChild(2)));
 			setValue(ctx, new_value);
 		}
 	}
@@ -71,7 +73,7 @@ public class ArithmeticCalculator extends ArithmeticBaseListener {
 	@Override
 	public void visitTerminal(TerminalNode node) {
 		if (!foundError && node.getSymbol().getType() == 5) {
-			setValue(node, (double) Integer.parseInt(node.getSymbol().getText()));
+			setValue(node, new BigInteger(node.getSymbol().getText()));
 		}
 	}
 
@@ -82,10 +84,10 @@ public class ArithmeticCalculator extends ArithmeticBaseListener {
 	}
 
 
-	private Double getValue(ParseTree node) {
+	private BigInteger getValue(ParseTree node) {
 		return this.values.get(node);
 	}
-	private void setValue(ParseTree node, Double value) {
+	private void setValue(ParseTree node, BigInteger value) {
 		this.values.put(node, value);
 	}
 
