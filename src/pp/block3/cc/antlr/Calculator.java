@@ -37,6 +37,11 @@ public class Calculator extends CalcBaseListener {
 		set(ctx, val(ctx.expr(0)) + val(ctx.expr(1)));
 	}
 
+	@Override
+	public void exitMinnumber(CalcParser.MinnumberContext ctx) {
+		set(ctx, Integer.parseInt(ctx.NUMBER().getText()));
+	}
+
 	/** Sets the val attribute of a given node. */
 	private void set(ParseTree node, int val) {
 		this.vals.put(node, val);
@@ -45,5 +50,10 @@ public class Calculator extends CalcBaseListener {
 	/** Retrieves the val attribute of a given node. */
 	public int val(ParseTree node) {
 		return this.vals.get(node);
+	}
+
+
+	public static void main(String[] args) {
+		String str  = "lool";
 	}
 }

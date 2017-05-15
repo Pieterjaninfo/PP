@@ -1,15 +1,16 @@
-lexer grammar CalcVocab;
+lexer grammar ExpressionVocab;
 
 //@header{package pp.block3.cc.antlr;}
 
-TIMES  : '*';
+POW    : '^';
 PLUS   : '+';
-MINUS  : '-';
+EQ     : '=';
 LPAR   : '(';
 RPAR   : ')';
 
-//NUMBER : [0-9]+ | '-' [0-9]+;
-NUMBER : [0-9]+ | '-' [0-9]+;
+NUM    : ('0'..'9')+;
+BOOL   : 'true' | 'false';
+STR    : ('a'..'z')+;
 
 // ignore whitespace
 WS : [ \t\n\r] -> skip;
