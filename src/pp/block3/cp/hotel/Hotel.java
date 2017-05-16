@@ -18,7 +18,7 @@ class Hotel extends Thread {
         while (occupied(i)) {
             i = (i + 1) % NR_ROOMS;
         }
-        rooms[i] = p;
+        rooms[i] = p;               //reassignment may occur illegally
         return i;
     }
 
@@ -30,17 +30,20 @@ class Hotel extends Thread {
 
     // every desk employee should run as a separate thread
     @Override
-    public void run() {
-        while (true) {
-            if (!queue.isEmpty()) {
+    public void run() { //hotel should not have
+        while (true) {  //polling all the time -wait/notify method
+            if (!queue.isEmpty()) { //check must be done synchronized
                 queueLock.lock();
                 Person guest = queue.remove(0);
-                queueLock.unlock();
+                queueLock.unlock(); //in finally clause if person is removed throws exception
                 checkIn(guest);
             }
         }
     }
 }
+
+//data race; reading writing a piece of data
+//race condition; order/matters of execution
 
 class Person { 
     // some appropriate query functions

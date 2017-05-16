@@ -6,7 +6,7 @@ tablerow: tableentry? ('&' tableentry?)* ENDROW;
 tableentry: TABLEENTRY;
 
 // Lexer rules
-BEGINTABLE: '\\begin{tabular}' ALLIGNMENT  NEWLINE;
+BEGINTABLE: '\\begin{tabular}' ALLIGNMENT NEWLINE;
 ENDTABLE: '\\end{tabular}' ' '* NEWLINE*;
 TABLEENTRY: ALPHANUM+;
 COMMENT: '%' [a-zA-Z0-9 .]+ NEWLINE+;

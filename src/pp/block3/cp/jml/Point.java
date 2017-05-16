@@ -7,7 +7,7 @@ public class Point {
 	/*@ spec_public */private int y = 1;
 	//@ public invariant x != y;
 
-	private final Object lockX = new Object();
+	private final Object lockX = new Object();	//intimid relation so locks should be one and thesame
 	private final Object lockY = new Object();
 
 	//@ ensures \result >= 0; 
@@ -34,7 +34,7 @@ public class Point {
 			}
 		}
 		synchronized (lockX) {
-			if (b) {
+			if (b) {		//should be in block above
 				x = x + n;
 			}
 		}

@@ -1,5 +1,6 @@
 package pp.block3.cc.tabular;
 
+import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Lexer;
@@ -14,23 +15,33 @@ import java.io.PrintWriter;
 public class TabularConverter extends TabularBaseListener {
     private String table;
     private boolean errorFound;
+    MyErrorListener errorListener;
 
 
     public void generateTable(String text) {
         this.table = "";
         this.errorFound = false;
+        errorListener = new MyErrorListener();
         Lexer lexer = null;
         try {
             lexer = new TabularLexer(CharStreams.fromFileName(text));
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(errorListener);
         } catch (IOException e) {
             System.err.println("Couldn't load the file: " + text);
             e.printStackTrace();
         }
         TabularParser parser = new TabularParser(new CommonTokenStream(lexer));
+        parser.removeErrorListeners();
+        parser.addErrorListener(errorListener);
+
         ParseTree tree = parser.start();
         new ParseTreeWalker().walk(this, tree);
 
-        if (errorFound) { System.err.println("Error occured parsing the tree."); }
+        if (errorFound) {
+            System.err.println("Error occured parsing the tree.");
+            System.out.println("Errors: " + errorListener.getErrors());
+        }
         else { System.out.println("HTML table: \n" + table); writeFile(text, table); }
     }
 
@@ -40,7 +51,6 @@ public class TabularConverter extends TabularBaseListener {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
