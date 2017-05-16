@@ -28,15 +28,41 @@ public interface DeclUseListener extends ParseTreeListener {
 	 */
 	void exitSeries(DeclUseParser.SeriesContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link DeclUseParser#unit}.
+	 * Enter a parse tree produced by the {@code decUnit}
+	 * labeled alternative in {@link DeclUseParser#unit}.
 	 * @param ctx the parse tree
 	 */
-	void enterUnit(DeclUseParser.UnitContext ctx);
+	void enterDecUnit(DeclUseParser.DecUnitContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link DeclUseParser#unit}.
+	 * Exit a parse tree produced by the {@code decUnit}
+	 * labeled alternative in {@link DeclUseParser#unit}.
 	 * @param ctx the parse tree
 	 */
-	void exitUnit(DeclUseParser.UnitContext ctx);
+	void exitDecUnit(DeclUseParser.DecUnitContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code useUnit}
+	 * labeled alternative in {@link DeclUseParser#unit}.
+	 * @param ctx the parse tree
+	 */
+	void enterUseUnit(DeclUseParser.UseUnitContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code useUnit}
+	 * labeled alternative in {@link DeclUseParser#unit}.
+	 * @param ctx the parse tree
+	 */
+	void exitUseUnit(DeclUseParser.UseUnitContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code seriesUnit}
+	 * labeled alternative in {@link DeclUseParser#unit}.
+	 * @param ctx the parse tree
+	 */
+	void enterSeriesUnit(DeclUseParser.SeriesUnitContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code seriesUnit}
+	 * labeled alternative in {@link DeclUseParser#unit}.
+	 * @param ctx the parse tree
+	 */
+	void exitSeriesUnit(DeclUseParser.SeriesUnitContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link DeclUseParser#decl}.
 	 * @param ctx the parse tree

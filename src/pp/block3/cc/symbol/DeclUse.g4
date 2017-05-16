@@ -4,7 +4,11 @@ grammar DeclUse;
 
 program : '(' series ')' ;
 series  : unit* ;
-unit    : decl | use | '(' series ')' ;
+unit    : decl              #decUnit
+        | use               #useUnit
+        | '(' series ')'    #seriesUnit
+        ;
+
 decl    : 'D:' ID ;
 use     : 'U:' ID ;
 

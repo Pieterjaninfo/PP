@@ -188,30 +188,70 @@ public class DeclUseParser extends Parser {
 	}
 
 	public static class UnitContext extends ParserRuleContext {
-		public DeclContext decl() {
-			return getRuleContext(DeclContext.class,0);
-		}
-		public UseContext use() {
-			return getRuleContext(UseContext.class,0);
-		}
-		public SeriesContext series() {
-			return getRuleContext(SeriesContext.class,0);
-		}
 		public UnitContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_unit; }
+	 
+		public UnitContext() { }
+		public void copyFrom(UnitContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class DecUnitContext extends UnitContext {
+		public DeclContext decl() {
+			return getRuleContext(DeclContext.class,0);
+		}
+		public DecUnitContext(UnitContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof DeclUseListener ) ((DeclUseListener)listener).enterUnit(this);
+			if ( listener instanceof DeclUseListener ) ((DeclUseListener)listener).enterDecUnit(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof DeclUseListener ) ((DeclUseListener)listener).exitUnit(this);
+			if ( listener instanceof DeclUseListener ) ((DeclUseListener)listener).exitDecUnit(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof DeclUseVisitor ) return ((DeclUseVisitor<? extends T>)visitor).visitUnit(this);
+			if ( visitor instanceof DeclUseVisitor ) return ((DeclUseVisitor<? extends T>)visitor).visitDecUnit(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class SeriesUnitContext extends UnitContext {
+		public SeriesContext series() {
+			return getRuleContext(SeriesContext.class,0);
+		}
+		public SeriesUnitContext(UnitContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof DeclUseListener ) ((DeclUseListener)listener).enterSeriesUnit(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof DeclUseListener ) ((DeclUseListener)listener).exitSeriesUnit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof DeclUseVisitor ) return ((DeclUseVisitor<? extends T>)visitor).visitSeriesUnit(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class UseUnitContext extends UnitContext {
+		public UseContext use() {
+			return getRuleContext(UseContext.class,0);
+		}
+		public UseUnitContext(UnitContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof DeclUseListener ) ((DeclUseListener)listener).enterUseUnit(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof DeclUseListener ) ((DeclUseListener)listener).exitUseUnit(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof DeclUseVisitor ) return ((DeclUseVisitor<? extends T>)visitor).visitUseUnit(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -224,6 +264,7 @@ public class DeclUseParser extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__2:
+				_localctx = new DecUnitContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(20);
@@ -231,6 +272,7 @@ public class DeclUseParser extends Parser {
 				}
 				break;
 			case T__3:
+				_localctx = new UseUnitContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(21);
@@ -238,6 +280,7 @@ public class DeclUseParser extends Parser {
 				}
 				break;
 			case T__0:
+				_localctx = new SeriesUnitContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(22);

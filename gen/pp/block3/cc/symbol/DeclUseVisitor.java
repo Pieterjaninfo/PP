@@ -23,11 +23,26 @@ public interface DeclUseVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSeries(DeclUseParser.SeriesContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link DeclUseParser#unit}.
+	 * Visit a parse tree produced by the {@code decUnit}
+	 * labeled alternative in {@link DeclUseParser#unit}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUnit(DeclUseParser.UnitContext ctx);
+	T visitDecUnit(DeclUseParser.DecUnitContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code useUnit}
+	 * labeled alternative in {@link DeclUseParser#unit}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUseUnit(DeclUseParser.UseUnitContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code seriesUnit}
+	 * labeled alternative in {@link DeclUseParser#unit}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSeriesUnit(DeclUseParser.SeriesUnitContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link DeclUseParser#decl}.
 	 * @param ctx the parse tree

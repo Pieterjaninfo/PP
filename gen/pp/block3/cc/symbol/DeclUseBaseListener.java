@@ -40,13 +40,37 @@ public class DeclUseBaseListener implements DeclUseListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnit(DeclUseParser.UnitContext ctx) { }
+	@Override public void enterDecUnit(DeclUseParser.DecUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitUnit(DeclUseParser.UnitContext ctx) { }
+	@Override public void exitDecUnit(DeclUseParser.DecUnitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUseUnit(DeclUseParser.UseUnitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUseUnit(DeclUseParser.UseUnitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSeriesUnit(DeclUseParser.SeriesUnitContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSeriesUnit(DeclUseParser.SeriesUnitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
