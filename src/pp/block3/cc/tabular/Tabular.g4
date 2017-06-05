@@ -1,7 +1,7 @@
 grammar Tabular;
 
 // Parser rules
-start: COMMENT? BEGINTABLE tablerow+ ENDTABLE;
+start: BEGINTABLE tablerow+ ENDTABLE;
 tablerow: tableentry? ('&' tableentry?)* ENDROW;
 tableentry: TABLEENTRY;
 
@@ -9,7 +9,7 @@ tableentry: TABLEENTRY;
 BEGINTABLE: '\\begin{tabular}' ALLIGNMENT NEWLINE;
 ENDTABLE: '\\end{tabular}' ' '* NEWLINE*;
 TABLEENTRY: ALPHANUM+;
-COMMENT: '%' [a-zA-Z0-9 .]+ NEWLINE+;
+COMMENT: '%' [a-zA-Z0-9 .]+ NEWLINE+        -> skip;
 
 ENDROW: '\\\\' NEWLINE;
 AND: '&';

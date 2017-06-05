@@ -13,13 +13,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class TabularConverter extends TabularBaseListener {
-    private String table;
     private boolean errorFound;
     MyErrorListener errorListener;
 
+    private StringBuilder tablebuilder;
 
-    public void generateTable(String text) {
-        this.table = "";
+
+    public void generateTable(String text) {        //USE STRINGBUILDER INSTEAD
+        this.tablebuilder = new StringBuilder();
         this.errorFound = false;
         errorListener = new MyErrorListener();
         Lexer lexer = null;
@@ -39,10 +40,10 @@ public class TabularConverter extends TabularBaseListener {
         new ParseTreeWalker().walk(this, tree);
 
         if (errorFound) {
-            System.err.println("Error occured parsing the tree.");
+            System.err.println("Error occured parsing the tree of file " + text.substring(25));
             System.out.println("Errors: " + errorListener.getErrors());
         }
-        else { System.out.println("HTML table: \n" + table); writeFile(text, table); }
+        else { System.out.println("HTML table: \n" + tablebuilder.toString()); writeFile(text, tablebuilder.toString()); }
     }
 
     private void writeFile(String filepath, String text) {
@@ -55,27 +56,27 @@ public class TabularConverter extends TabularBaseListener {
 
     @Override
     public void enterStart(TabularParser.StartContext ctx) {
-        table += "<html>\n<body>\n<table border=\"1\">\n";
+        tablebuilder.append("<html>\n<body>\n<table border=\"1\">\n");
     }
 
     @Override
     public void exitStart(TabularParser.StartContext ctx) {
-        table += "</table>\n</body>\n</html>\n";
+        tablebuilder.append("</table>\n</body>\n</html>\n");
     }
 
     @Override
     public void enterTablerow(TabularParser.TablerowContext ctx) {
-        table += "<tr>\n";
+        tablebuilder.append("<tr>\n");
     }
 
     @Override
     public void exitTablerow(TabularParser.TablerowContext ctx) {
-        table += "</tr>\n";
+        tablebuilder.append("</tr>\n");
     }
 
     @Override
     public void enterTableentry(TabularParser.TableentryContext ctx) {
-        table += "\t<td>" + ctx.getText() + "</td>\n";
+        tablebuilder.append("\t<td>" + ctx.getText() + "</td>\n");
     }
 
     @Override

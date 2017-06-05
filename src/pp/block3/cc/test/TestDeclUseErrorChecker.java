@@ -16,8 +16,6 @@ public class TestDeclUseErrorChecker {
     @Before
     public void initTable() { this.errorChecker = new ErrorChecker(); }
 
-
-
     @Test
     public void testErrors() {
         List<String> errors1 = yields(path + "prog1");
@@ -34,17 +32,10 @@ public class TestDeclUseErrorChecker {
         Assert.assertEquals("Variable 'U:random' used out of scope at line 1:16", errors3.get(1));
         Assert.assertEquals(0, errors4.size());
 
-
     }
 
     private List<String> yields(String file) {
         return errorChecker.checkErrors(file);
-
-
-
-
     }
-
-
 
 }

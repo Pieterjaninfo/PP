@@ -1,0 +1,15 @@
+// recursive fib grammar.
+
+
+start:  in "arg? "      => r_arg
+        loadI 1         => r_min
+        i2i r_arg       => r_n
+        jumpI           -> startfib
+
+end:    out "Result: ", r_res
+
+
+startfib:   cmp_LE r_n, r_min   => r_cmp
+            cbr r_cmp           -> fibthen, fibelse
+
+fibthen:
