@@ -24,7 +24,7 @@ public class FibTest {
     public void setup() {
         this.assembler = new Assembler();
 
-        File file = new File(PATH + "lol.iloc");
+        File file = new File(PATH + "fib.iloc");
         try {
             this.prog = assembler.assemble(file);
         } catch (FormatException | IOException e) {
@@ -45,7 +45,7 @@ public class FibTest {
 
         // Print and test results
         System.out.println(out);
-        int result = machine.getReg("r_return_value");
+        int result = machine.getReg("r_res");
         Assert.assertEquals(10946, result);
     }
 

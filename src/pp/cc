@@ -1,0 +1,366 @@
+CC Block 1
+EC Chapter 1: Overview of Compilation
+CC 1.1
+back end: mapping programs to target machine
+front end: understanding source-language program
+grammar: set of rules of the language
+instruction scheduling: reordering operations in code to make it faster
+instruction selection: rewriting IR operation into target machine operations
+optimizer: making code more efficient
+parsing: deriving a sentence using the grammar 
+register allocation: diciding what values should be in the target-machine registers (adding virtual registers if needed)
+scanning: reads stream of characters and produces stream of words (tokens)
+type checking: analyze program and assign type to each name and each expression. And ensure they are used in legal contexts
+
+CC 1.2
+1.
+Most students is good programmers . (I)
+
+Adj   Noun   Verb Adj Noun Endmark  (II)
+
+Modi  Noun   Verb Modi Noun Endmark
+    Subj             Obj
+--------------------------- =
+Subj verb Obj Endmark
+--------------------- =
+Sentence
+
+2.
+Singular verb 'is' is used instead of plural form 'are'. 
+The verb TYPE is inaccurate
+
+3.
+scanning: construction building blocks		(I)
+parsing: splitting up in words (tokens)		(II)
+type checking: correct form checking
+
+CC 1.3
+Programming Paradigms  is   a   diverse interesting elective module  .
+noun        noun      verb part   adj     adj        adj      noun endmark
+
+1 Sentence	-> Subject verb Object endmark
+2 Subject	-> noun
+3 Subject	-> Modifier noun
+4 Object	-> noun
+(rule 5 removed)
+6 Modifier	-> adjective
+
+7 Modifier 	-> particle
+8 Subject	-> Subject noun
+9 Object	-> Modifier Object
+extra: change rule 3 to: 'Subject -> Modifier Subject'
+
+CC 1.4
+d <- d + 2 * (a+b)
+1.
+loadAI r_arp, @d    => rd           // load d
+loadI 2             => r2           // load 2
+loadAI r_arp, @a    => ra           // load a
+loadAI r_arp, @b    => rb           // load b
+add ra, rb          => ra           // a+b
+mult ra, r2         => ra           // 2* (a+b)
+add rd, ra          => rd           // d + 2*(a+b)
+storeAI rd          => r_arp, @d    // write d
+
+2. 
+Least registers (use r1 for result and r2 for loading values)
+loadAI r_arp, @a    => r1 	        // load a
+loadAI r_arp, @b    => r2           // load b
+add r1, r2          => r1           // a+b
+add r1, r1          => r1           // (a+b) + (a+b) = 2*(a+b)
+loadAI r_arp, @d    => r2           // load r2
+add r1, r2          => r1           // d + 2*(a+b)
+storeAI r1          => r_arp, @d    // write d
+
+3.
+Fastest scheduling with least amount of registers
+Start	End	
+1	3	loadAI r_arp, @a    => ra           // load a
+2	4	loadAI r_arp, @b    => rb           // load b
+3	5	loadAI r_arp, @d    => rd           // load d
+5	5	add ra, rb          => ra           // a+b
+6	6	add ra, ra          => ra           // (a+b) + (a+b) = 2*(a+b)
+7	7	add rd, ra          => rd           // d + 2*(a+b)
+8	10	storeAI rd          => r_arp, @d    // write d
+
+Original (shitty) scheduling
+Start	End
+1	3	loadAI r_arp, @d    => rd           // load d
+2	4	loadI 2             => r2           // load 2
+3	5	loadAI r_arp, @a	=> ra           // load a
+4	6	loadAI r_arp, @b	=> rb           // load b
+7	7	add ra, rb	        => ra           // a+b
+8	9	mult ra, r2	        => ra           // 2* (a+b)
+10	10	add rd, ra	        => rd           // d + 2*(a+b)
+11	13	storeAI rd	        => r_arp, @d    // write d
+
+
+EC Chapter 2: Scanners
+CC 1.5
+
+(qo) ----> (q1) ----> (q2) ----> (q3) ----> (q4) ----> (q5) ----> ((q6))
+    a..z        0..9       0..9	      0..9       0..9       0..9
+    A..Z        a..z       a..z       a..z       a..z       a..z
+                A..Z       A..Z       A..Z       A..Z       A..Z
+
+CC 1.6
+(qo) ----> (q1) ----> (q2) ----> (q3) ----> ((q4))
+  ^    (          "          "          )      |
+  |                                            |
+  +--------------------------------------------+
+						( 
+
+CC 1.7
+1. underscore (_) represents a space
+((La+_*) U (Li_*))+
+2. in book
+3. Try to do as big as possible 'La La La Li' > 'La La' > 'La'
+so: "Laaaa LaLaa" => 'Laaaa La', 'Laa'
+
+and: "La La La La Li" => 'La', 'La La La Li'
+-- afgetekend
+
+CC 3: Scanner Implementation
+-
+
+1-CC.4: Antlr
+CC 1.12
+1. fragments can be used to clean up the code. fragment will cause not a token to be made.
+
+3. Ommitting the fragment modifier causes more tokens to be made, allowing more than just the simple 6 letter ID to be valid word in the language.
+
+
+1-CC.5 EC Section 3.3: Top-Down Parsing
+CC 1.15
+Sentential form: a string consisting of terminal or nonterminal symbols.
+parse tree: a graph showing how the word is derived.
+ambiguity: deriviation possible in multiple ways.
+left/right recursion: A rule calling itself (on the left/right) calling something else as well. (non-terminals are expanded left-to-right/right-to-left)
+recursive-descent parsing: set of mutually recursive procedures for each nonterminal
+LL(x): parser scanning inputs left to right constructing leftmost derivation using a lookahead of x symbols.
+bottom-up parsing: trees starting from its leaves leading up to its root.
+LR(x): scans input left to right to build rightmost derivation. (Left to right scan, reverse rightmost derivation, x symbols of lookahead.
+
+
+
+    a   a   a   n   v   n   e
+6   M   a   a   n   v   n   e
+6   M   M   a   n   v   n   e
+7     M     a   n   v   n   e
+6     M     M   n   v   n   e
+7        M      n   v   n   e
+2        M      U   v   n   e
+3            U      v   n   e
+4            U      v   O   e
+1                           S
+
+
+
+
+
+
+
+
+
+CC 1.16
+1.  S -> U v O e
+2.  U -> n
+3.  U -> M U
+4.  O -> n
+5.  O -> M O
+6.  M -> a
+7.  M -> M M
+
+adjective adjective adjective noun verb noun endmark
+
+a   a   a   n   v   n   e
+
+1. Leftmost derivation:
+
+                S
+------------------------------
+1               U   v   O   e
+3           M   U   v   O   e
+7       M   M   U   v   O   e
+7   M   M   M   U   v   O   e
+6   a   M   M   U   v   O   e
+6   a   a   M   U   v   O   e
+6   a   a   a   U   v   O   e
+2   a   a   a   n   v   O   e
+4   a   a   a   n   v   n   e
+            
+                
+Rightmost derivation
+                S
+------------------------------
+1               U   v   O   e
+4               U   v   n   e
+3           M   U   v   n   e
+3       M   M   U   v   n   e
+3   M   M   M   U   v   n   e
+2   M   M   M   n   v   n   e
+6   M   M   a   n   v   n   e
+6   M   a   a   n   v   n   e
+6   a   a   a   n   v   n   e
+
+
+2. Everytime added a new modifier to the Subject 
+
+3. Remove rule 7, because U -> M U, there is no need for M -> M M
+
+
+
+Block 2
+
+EC Section 3.3: Top-Down Parsing
+
+
+CC 2.
+
+
+Block 3
+EC Chapter 4
+3-CC.1
+operator overloading: operator that has different meanings depending on the types of its arguments
+type inference: process of determining type for each name and each expression
+synthesized attribute: defined in bottom up information flow. (LHS rules)
+inherited attribute: defined in top-down information flow (RHS rules)
+syntax-directed translation: source language translation is completely driven by parser.
+
+3--CC.2
+
+3--CC.3
+1.
+  (^)   Num     Bool    String
+Num     Num     illegal illegal
+Bool    illegal illegal illegal        
+String  String  illegal illegal
+
+  (+)   Num     Bool    String
+Num     Num     illegal illegal
+Bool    illegal Bool    illegal
+String  illegal illegal String
+
+  (=)   Num     Bool    String
+Num     Bool    illegal illegal
+Bool    illegal Bool    illegal
+String  illegal illegal Bool
+
+
+2.
+Production          Attribution Rules
+T  -->  T ^ T       T.type <- F^ (T.type,T.type)
+    |   T + T       T.type <- F+ (T.type,T.type)
+    |   T = T       T.type <- F= (T.type,T.type)
+    |   (T)         T.type <- T.type
+    |   num         defined 
+    |   bool        defined 
+    |   str         defined
+3. synthesized attributes; takes value from its child nodes (and left recursive)
+
+
+3--CC.4
+2.
+action based; more compact, less files, no visit node for rules starting with NT's
+listener-based; more clean, seperation between grammar and tree evaluation
+
+3. wont be able to generate antlr recognizer [sets of rules are mutually left-recursive]
+probably it doesnt know which rule it has to pick yet [left lookahead 1] in the case of [expr times expr] and [expr plus expr].
+4. synthesized attributes; can be set when exiting the node
+   inherited attributes; can be set when entering the node 
+
+
+
+
+Block 4
+4-CC.1
+
+AST = A trimmed down version of a parse tree, where all the extraneous nodes, created by the application of grammar rules are removed. Only the expressions as humans would interpret them are left. 
+DAG (Directed Acyclic Graph) = An AST where duplicate expressions are included only once and accessed via cycles in the tree. 
+basic block = a block of instructions that will always be executed together unless an exception is thrown. 
+CFG 1. Context Free Grammar = A grammar that defines the set of Strings of Symbols that is accepted by a Language. 
+    2. Control Flow Graph = Every node in the tree represents a basic block, edges between the nodes represent transitions between such blocks. 
+dependance graph = A graph that illustrates the relations between the declaration of variables and uses of variables. 
+SSA (single-assignment form) = A variable naming system in which each definition of a variable has a unique name and where every use refers to a single definition. 
+symbol table = A table with names and definitions of all variables used in a program, be it user defined variables or variables created by the compiler.
+
+
+
+4-CC.6
+3. every memory location has 8 bits, an int uses 32 bits, so it needs 4 memory slots per int value.
+
+4-CC.7
+
+Register-to-register
+start:  loadAI r_arp, @n    => r_n
+        loadI 1             => r_x
+        loadI 1             => r_y
+        loadI 1             => r_z
+
+while:  cmp_GT r_n, 1       => r_cmp
+        cbr r_cmp           -> body, end
+
+body:   addI r_x, r_y       => r_z
+        i2i r_y             => r_x
+        i2i r_z             => r_y
+        subI r_n, 1         => r_n
+        jumpI               -> while
+
+end:    out "result: ",     r_z
+
+
+Memory-to-memory
+
+while:  loadAI r_arp, @n    => r_n
+        loadAI r_arp, @z    => r_z
+
+        cmp_GT r_n, 1       => r_cmp
+        cbr r_cmp           -> body, end
+
+body:   loadAI r_arp @x     => r_x
+        loadAI r_arp @y     => r_y
+        loadAI r_arp @z     => r_z
+
+        add r_x, r_y        => r_z
+        storeAI r_z         => r_arp, @z
+        storeAI r_y         => r_arp, @x
+        storeAI r_z         => r_arp, @y
+
+        loadAI r_arp, @n    => r_n
+        subI r_n, 1         => r_n
+        storeAI r_n         => r_arp, @n
+        jumpI               -> while
+
+end:    out "result: ", r_z
+
+
+// from n to 1-46 - higher gives interger overflow 
+
+
+Block 5
+
+5.4
+
+1.Advantages visitor-based
+shorter, more scalable for bigger grammars, precise control
+2. Advantages listener-based
+easy pre/post order traversel (inherited/ synthesized attribtes),saver
+
+
+5.8
+1.
+
+Scope   a       b       c       d       e       f       g
+Main    (1,0)   (1,4)   (1,8)   (1,12)  (1,16)  ()      ()
+P1      (1,0)   (2,0)   (1,8)   (2,4)   ()      (2,8)   ()
+P2      (1,0)   (1,4)   (1,8)   ()      ()      ()      ()
+P3      (3,0)   (3,4)   (1,8)   (2,4)   ()      (2,8)   ()
+P4      (2,0)   (1,4)   (2,4)   (2,12)  (1,16)  ()      (2,8)
+P5      (2,0)   (1,4)   (3,0)   (3,4)   (1,16)  ()      (2,8)
+
+
+
+
+
+
+
