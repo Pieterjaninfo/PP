@@ -1,0 +1,41 @@
+5-CP.3
+1.
+Thread 1        Thread 2
+x = 1           y = 1
+j = y           i = x
+
+possible values:
+i   j
+1   1
+1   0
+0   1
+0   0   <= if compiler reorders code
+
+
+2.
+Thread 1        Thread 2
+answer = 42     if (ready) then
+ready = true        println(answer)
+
+possible value:
+answer
+42
+0       <= if compiler reorders code
+
+write to a volatile fields always happends before the read of that field,
+meaning that the volitile variable answer will be assigned the value 42
+before it is printed.
+
+
+3.
+Thread 1        Thread 2
+r1 = x          r2 = y
+if r1>0 then    if r2>0 then
+    y=1             x=1
+
+r1=r2=1 is a possible value because:
+x and y are constants of value 0/1
+    -> so x and y are nonnegative
+        -> if guards are true
+            -> writes can be moved early (y=1 and x=1)
+
