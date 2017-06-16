@@ -38,7 +38,7 @@ public class FibTest {
         Machine machine = sim.getVM();
 
         // Set in and out streams and run
-        sim.setIn(new ByteArrayInputStream("20".getBytes()));
+        sim.setIn(new ByteArrayInputStream("25".getBytes()));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         sim.setOut(out);
         sim.run();
@@ -46,7 +46,7 @@ public class FibTest {
         // Print and test results
         System.out.println(out);
         int result = machine.getReg("r_res");
-        Assert.assertEquals(10946, result);
+        Assert.assertEquals(121393, result);
     }
 
 }
