@@ -17,5 +17,8 @@ fn main() {
       }
    });
 
+   
+   //println!("{:?}", &a.lock().unwrap()[..]);
+   println(a[0]);
 
 }
